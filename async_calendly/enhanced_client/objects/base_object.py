@@ -1,3 +1,13 @@
+import datetime
+
+
+def make_datetime(date_string):
+    if date_string:
+        return datetime.datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%S.%fZ')
+    else:
+        return None
+
+
 class CalendlyObject:
     fields = {}
 
@@ -14,6 +24,8 @@ class CalendlyObject:
 
     def update_from_dict(self, update_dict):
         for field_name, transform in self.fields.items():
+            if transform == 'datetime':
+                value = make_datetime(value)
             value = update_dict.get(field_name, None)
             setattr(self, field_name, value)
 
