@@ -7,6 +7,7 @@ class CalendlyClient:
     def __init__(self, api_key):
         self.api_key = api_key
         self.active_requests = 0
+        self.closing = False
 
     async def init_session(self):
         connector = aiohttp.TCPConnector()
@@ -22,7 +23,7 @@ class CalendlyClient:
         # Increment active request count
         self.active_requests += 1
         # Start a new session if one is needed
-        if not hasattr(self, 'session') or self.session.closed:
+        if not hasattr(self, 'session') or self.closing or self.session.closed:
             await self.init_session()
 
     async def __aexit__(self, *args, **kwargs):
@@ -30,14 +31,19 @@ class CalendlyClient:
         self.active_requests -= 1
         # If there are no more subscribers, close the session
         if self.active_requests == 0:
+            self.closing = True
             await self.session.__aexit__(*args, **kwargs)
+            self.closing = False
 
     async def _request(self, method, path, params=None, data=None):
         url = f'https://api.calendly.com/{path}'
         # Open session if needed
         async with self:
+            print('Making Request')
             response = await self.session.request(method=method, url=url, params=params, json=data)
-        return await response.json()
+        response_dict = await response.json()
+        print('Response:', response_dict)
+        return response_dict
 
     async def _list_request(self, path, count=None, sort=None, page_token=None, params=None):
         if params is None:
@@ -107,7 +113,7 @@ class CalendlyClient:
         if status:
             params['status'] = status
         return await self._list_request(
-            f'scheduled_events/{uuid}', count=count, sort=sort, page_token=page_token, params=params
+            f'scheduled_events/{uuid}/invitees', count=count, sort=sort, page_token=page_token, params=params
         )
 
     # SCHEDULING LINK API Endpoints

@@ -24,9 +24,9 @@ class CalendlyObject:
 
     def update_from_dict(self, update_dict):
         for field_name, transform in self.fields.items():
+            value = update_dict.get(field_name, None)
             if transform == 'datetime':
                 value = make_datetime(value)
-            value = update_dict.get(field_name, None)
             setattr(self, field_name, value)
 
     @classmethod
