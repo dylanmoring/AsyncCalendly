@@ -24,3 +24,13 @@ class EventInvitee(CalendlyObject):
         'updated_at': 'datetime',
         'uri': ''
     }
+
+    @property
+    def event(self):
+        return self._event
+
+    @event.setter
+    def event(self, value):
+        from .event import Event
+        self._event = value
+        self.Event = Event(self.client, value)
