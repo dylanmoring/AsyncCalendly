@@ -10,3 +10,13 @@ class OrganizationMembership(CalendlyObject):
         'uri': '',
         'user': ''
     }
+
+    @property
+    def user(self):
+        return self._user
+
+    @user.setter
+    def user(self, value):
+        from .user import User
+        self._user = User('')
+        self._user.update_from_dict(value)
