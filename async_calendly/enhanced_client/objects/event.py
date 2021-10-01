@@ -32,3 +32,6 @@ class Event(CalendlyObject):
             uuid=self.uuid, email=email, status=status, count=per_page, max_pages=max_pages
         )
 
+    async def get(self):
+        update_dict = await self.client.get_event(self.uuid)
+        self.update_from_dict(update_dict)

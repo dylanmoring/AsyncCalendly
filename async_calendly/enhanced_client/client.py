@@ -4,10 +4,17 @@ from .list_response_handler import ListResponseHandler
 
 
 class CalendlyEnhancedClient(CalendlyClient):
+    # Resource response functions
     async def get_current_user(self):
         response = await super().get_current_user()
         current_user = response['resource']
         return User.create_from_dict(self, current_user)
+
+    async def get_event(self, uuid):
+        response = await super().get_event(uuid)
+        return response['resource']
+
+    # Collection response functions
 
     async def list_event_types(self, count=50, max_pages=100, **kwargs):
         first_response = await super().list_event_types(count=count, **kwargs)
