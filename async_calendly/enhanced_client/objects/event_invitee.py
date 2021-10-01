@@ -31,6 +31,9 @@ class EventInvitee(CalendlyObject):
 
     @event.setter
     def event(self, value):
+        # If value is unchanged, don't update it
+        if getattr(self, '_event', None) == value:
+            return
         from .event import Event
         self._event = value
         self.Event = Event(self.client, value)

@@ -23,6 +23,9 @@ class Event(CalendlyObject):
 
     @event_type.setter
     def event_type(self, value):
+        # If value is unchanged, don't update it
+        if getattr(self, '_event_type', None) == value:
+            return
         from .event_type import EventType
         self._event_type = value
         self.EventType = EventType(self.client, value)

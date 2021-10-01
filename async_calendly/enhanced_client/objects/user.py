@@ -21,6 +21,9 @@ class User(CalendlyObject):
 
     @current_organization.setter
     def current_organization(self, value):
+        # If value is unchanged, don't update it
+        if getattr(self, '_current_organization', None) == value:
+            return
         from .organization import Organization
         self._current_organization = value
         self.Organization = Organization(self.client, value)
