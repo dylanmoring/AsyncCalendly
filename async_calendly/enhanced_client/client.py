@@ -1,5 +1,5 @@
 from ..basic_client.client import CalendlyClient
-from .objects import User, EventType, Event, EventInvitee
+from .objects import User, EventType, Event, EventInvitee, OrganizationMembership
 from .list_response_handler import ListResponseHandler
 
 
@@ -34,3 +34,8 @@ class CalendlyEnhancedClient(CalendlyClient):
         first_response = await super().list_event_invitees(count=count, **kwargs)
         all_results = await ListResponseHandler.get_all_for_list_response(self, first_response, max_page=max_pages)
         return [EventInvitee.create_from_dict(self, et_dict) for et_dict in all_results]
+
+    async def list_organization_memberships(self, count=50, max_pages=100, **kwargs):
+        first_response = await super().list_organization_memberships(count=count, **kwargs)
+        all_results = await ListResponseHandler.get_all_for_list_response(self, first_response, max_page=max_pages)
+        return [OrganizationMembership.create_from_dict(self, om_dict) for om_dict in all_results]

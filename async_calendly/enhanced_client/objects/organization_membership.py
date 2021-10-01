@@ -18,5 +18,5 @@ class OrganizationMembership(CalendlyObject):
     @user.setter
     def user(self, value):
         from .user import User
-        self._user = User('')
+        self._user = User(self.client, '')
         self._user.update_from_dict(value)

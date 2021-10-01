@@ -61,7 +61,7 @@ class CalendlyClient:
         return await self._request('GET', f'users/{uuid}')
 
     async def get_current_user(self):
-        return await self.get_user('me')
+        return await self._request('GET', 'users/me')
 
     # EVENT TYPE API Endpoints
     async def get_event_type(self, uuid):

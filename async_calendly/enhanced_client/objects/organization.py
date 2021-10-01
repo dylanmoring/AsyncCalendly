@@ -17,3 +17,8 @@ class Organization(CalendlyObject):
             min_start_time=min_start_time, status=status, count=per_page, max_pages=max_pages
         )
 
+    async def list_organization_memberships(self, email=None, per_page=50, max_pages=100):
+        return await self.client.list_organization_memberships(
+            organization=self.uri, email=email, count=per_page, max_pages=max_pages
+        )
+
