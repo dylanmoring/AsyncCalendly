@@ -10,6 +10,10 @@ class CalendlyEnhancedClient(CalendlyClient):
         current_user = response['resource']
         return User.create_from_dict(self, current_user)
 
+    async def get_user(self, uuid):
+        response = await super().get_user(uuid)
+        return response['resource']
+
     async def get_event(self, uuid):
         response = await super().get_event(uuid)
         return response['resource']

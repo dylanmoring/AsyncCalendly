@@ -28,6 +28,10 @@ class User(CalendlyObject):
         self._current_organization = value
         self.Organization = Organization(self.client, value)
 
+    async def get(self):
+        update_dict = await self.client.get_user(self.uuid)
+        self.update_from_dict(update_dict)
+
     async def list_event_types(self, per_page=50, max_pages=100):
         return await self.client.list_event_types(user=self.uri, count=per_page, max_pages=max_pages)
 
